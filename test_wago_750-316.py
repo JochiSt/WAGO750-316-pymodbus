@@ -5,4 +5,3 @@
 from WAGO750 import WAGO_750_316
 
 modbus_io = WAGO_750_316()
-modbus_io.read_firmware()
