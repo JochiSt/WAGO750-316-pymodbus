@@ -28,4 +28,6 @@ class WAGO_750_316(WAGO_750):
             print("ERROR in connection")
             
         self.read_firmware_info()
+        self.read_constant_registers()
+        self.read_configuration_registers()
             
