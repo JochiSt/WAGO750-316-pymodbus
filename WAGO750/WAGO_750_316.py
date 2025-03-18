@@ -9,6 +9,7 @@ from .WAGO_750 import WAGO_750
 class WAGO_750_316(WAGO_750):
 
     def __init__(self, port="/dev/ttyUSB0", baudrate=9600, device_id=1):
+        super(WAGO_750_316, self).__init__()
         self.client = ModbusClient(
                 port=port, 
                 baudrate=baudrate, 
@@ -25,4 +26,6 @@ class WAGO_750_316(WAGO_750):
             print("connection to device succeeded")
         else:
             print("ERROR in connection")
+            
+        self.read_firmware_info()
             
