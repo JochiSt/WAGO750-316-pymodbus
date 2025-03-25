@@ -47,12 +47,14 @@ class WAGO_750(object):
     }
     
     
-    def __init__(self):
+    def __init__(self, DEBUG = False):
         self.client = None
-        self.device_id=0
+        self.device_id = 0
         self._FIRMWARE_INFO_RESULT = {}
         self._CONSTANT_REGISTERS_RESULT = {}
         self._CONFIGURATION_REGISTERS_RESULT = {}
+        
+        self._DEBUG = DEBUG
         
         self.modules = []
         
@@ -62,23 +64,24 @@ class WAGO_750(object):
                 WAGO_750._FIRMWARE_INFO_REGISTERS[key][0], count=WAGO_750._FIRMWARE_INFO_REGISTERS[key][1], slave=self.device_id)
             self._FIRMWARE_INFO_RESULT[key] = result.registers
             
-        for key in self._FIRMWARE_INFO_RESULT.keys():
-            print(key, end=" ")
-            if key not in ["INFO_DESCRIPTION", "INFO_TIME", "INFO_DATE"]:
-                for value in self._FIRMWARE_INFO_RESULT[key]:
-                    print("%X"%(value), end=" ")
-            else:
-                # build hex string
-                result_bytes = ""
-                for i in self._FIRMWARE_INFO_RESULT[key]:
-                    if ((i & 0xFF00) >> 8) < 255 and i & 0xFF < 255:
-                        result_bytes += "%X "%(i & 0xff)
-                        if (i & 0xFF00) >> 8 != 0:
-                            result_bytes += "%X "%((i & 0xFF00) >> 8)
-                        
-                result_bytes = bytes.fromhex( result_bytes )
-                print( result_bytes.decode(errors='ignore'), end="" )
-            print()
+        if self._DEBUG:
+            for key in self._FIRMWARE_INFO_RESULT.keys():
+                print(key, end=" ")
+                if key not in ["INFO_DESCRIPTION", "INFO_TIME", "INFO_DATE"]:
+                    for value in self._FIRMWARE_INFO_RESULT[key]:
+                        print("%X"%(value), end=" ")
+                else:
+                    # build hex string
+                    result_bytes = ""
+                    for i in self._FIRMWARE_INFO_RESULT[key]:
+                        if ((i & 0xFF00) >> 8) < 255 and i & 0xFF < 255:
+                            result_bytes += "%X "%(i & 0xff)
+                            if (i & 0xFF00) >> 8 != 0:
+                                result_bytes += "%X "%((i & 0xFF00) >> 8)
+                            
+                    result_bytes = bytes.fromhex( result_bytes )
+                    print( result_bytes.decode(errors='ignore'), end="" )
+                print()
     
     def read_constant_registers(self):
         for key in WAGO_750._CONSTANT_REGISTERS.keys():          
@@ -86,19 +89,21 @@ class WAGO_750(object):
                 WAGO_750._CONSTANT_REGISTERS[key][0], count=WAGO_750._CONSTANT_REGISTERS[key][1], slave=self.device_id)
             self._CONSTANT_REGISTERS_RESULT[key] = result.registers[0]
             
-        for key in self._CONSTANT_REGISTERS_RESULT.keys():
-            print(key, "%X"%(self._CONSTANT_REGISTERS_RESULT[key]))
             assert self._CONSTANT_REGISTERS_RESULT[key] == WAGO_750._CONSTANT_REG_VALUES[key]
         
+        if self._DEBUG:
+            for key in self._CONSTANT_REGISTERS_RESULT.keys():
+                print(key, "%X"%(self._CONSTANT_REGISTERS_RESULT[key]))
             
     def read_configuration_registers(self):
         for key in WAGO_750._CONFIGURATION_REGISTERS.keys():          
             result = self.client.read_input_registers( 
                 WAGO_750._CONFIGURATION_REGISTERS[key][0], count=WAGO_750._CONFIGURATION_REGISTERS[key][1], slave=self.device_id)
             self._CONFIGURATION_REGISTERS_RESULT[key] = result.registers[0]
-            
-        for key in self._CONFIGURATION_REGISTERS_RESULT.keys():
-            print(key, "%d"%(self._CONFIGURATION_REGISTERS_RESULT[key]))
+              
+        if self._DEBUG:          
+            for key in self._CONFIGURATION_REGISTERS_RESULT.keys():
+                print(key, "%d"%(self._CONFIGURATION_REGISTERS_RESULT[key]))
             
     def add_module(self, module):
         self.modules.append(module)
