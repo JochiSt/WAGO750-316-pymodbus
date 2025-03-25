@@ -41,6 +41,8 @@ class WAGO_750(object):
         self._CONSTANT_REGISTERS_RESULT = {}
         self._CONFIGURATION_REGISTERS_RESULT = {}
         
+        self.modules = []
+        
     def read_firmware_info(self):
         for key in WAGO_750._FIRMWARE_INFO_REGISTERS.keys():          
             result = self.client.read_input_registers( 
@@ -82,3 +84,6 @@ class WAGO_750(object):
             
         for key in self._CONFIGURATION_REGISTERS_RESULT.keys():
             print(key, "%d"%(self._CONFIGURATION_REGISTERS_RESULT[key]))
+            
+    def add_module(self, module):
+        self.modules.append(module)
