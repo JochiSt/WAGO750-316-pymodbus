@@ -26,6 +26,19 @@ class WAGO_750(object):
         "GP_MAX_HALF_NEG"   : (0x2008, 1), 
     }
     
+    _CONSTANT_REG_VALUES = {
+        # Name                value
+        "GP_ZERO"           : 0x0000, 
+        "GP_ONES"           : 0xFFFF, 
+        "GP_1234"           : 0x1234, 
+        "GP_AAAA"           : 0xAAAA, 
+        "GP_5555"           : 0x5555, 
+        "GP_MAX_POS"        : 0x7FFF, 
+        "GP_MAX_NEG"        : 0x8000, 
+        "GP_MAX_HALF_POS"   : 0x3FFF, 
+        "GP_MAX_HALF_NEG"   : 0x4000, 
+    }
+    
     _CONFIGURATION_REGISTERS = {
         "CnfLen.AnalogOut"  : (0x1022, 1),
         "CnfLen.AnalogInp"  : (0x1023, 1),
@@ -75,6 +88,8 @@ class WAGO_750(object):
             
         for key in self._CONSTANT_REGISTERS_RESULT.keys():
             print(key, "%X"%(self._CONSTANT_REGISTERS_RESULT[key]))
+            assert self._CONSTANT_REGISTERS_RESULT[key] == WAGO_750._CONSTANT_REG_VALUES[key]
+        
             
     def read_configuration_registers(self):
         for key in WAGO_750._CONFIGURATION_REGISTERS.keys():          
