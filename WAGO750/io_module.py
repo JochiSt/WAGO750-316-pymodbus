@@ -9,4 +9,16 @@ class io_module(object):
     def __init__(self, controller : WAGO_750):
         controller.add_module(self)
         print("Creating a new IO module")
+        
+    def readBinaryInputs(self):
+        print("not implemented")
+        
+    def setBinaryOutputs(self, outputs = []):
+        print("not implemented")
+        
+    def setAnalogOutputs(self, outputs = []):
+        print("not implemented")
+        
+    def readAnalogInputs(self):
+        print("not implemented")
     
