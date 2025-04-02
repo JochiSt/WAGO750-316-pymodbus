@@ -57,6 +57,8 @@ class WAGO_750(object):
         self._DEBUG = DEBUG
         
         self.modules = []
+        self.current_in_offset = 0
+        self.current_out_offset = 0
         
     def read_firmware_info(self):
         for key in WAGO_750._FIRMWARE_INFO_REGISTERS.keys():          
@@ -105,5 +107,20 @@ class WAGO_750(object):
             for key in self._CONFIGURATION_REGISTERS_RESULT.keys():
                 print(key, "%d"%(self._CONFIGURATION_REGISTERS_RESULT[key]))
             
-    def add_module(self, module):
+    def add_module(self, module, N_in_regs=None, N_out_regs=None):
         self.modules.append(module)
+        
+        inOffset = self.current_in_offset
+        outOffset = self.current_out_offset
+        
+        if N_in_regs:
+            self.current_in_offset += N_in_regs
+        
+        if N_out_regs:
+            self.current_out_offset += N_out_regs
+            
+        return inOffset, outOffset
+        
+    def getOffsets(self):
+        return self.current_in_offset, self.current_out_offset
+    
