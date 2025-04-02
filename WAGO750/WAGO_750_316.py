@@ -8,8 +8,8 @@ from .WAGO_750 import WAGO_750
 
 class WAGO_750_316(WAGO_750):
 
-    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, device_id=1):
-        super(WAGO_750_316, self).__init__()
+    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, device_id=1, DEBUG=False):
+        super(WAGO_750_316, self).__init__(DEBUG=DEBUG)
         self.client = ModbusClient(
                 port=port, 
                 baudrate=baudrate, 
