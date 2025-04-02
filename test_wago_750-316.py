@@ -8,19 +8,35 @@ from WAGO750 import WAGO_750_504, WAGO_750_1515
 
 from WAGO750 import WAGO_750_600
 
-modbus_io = WAGO_750_316()
+from WAGO750 import Beckhoff_KL4032
+from WAGO750 import Beckhoff_KL2134
 
+import time
+
+modbus_io = WAGO_750_316(DEBUG=True)
 # teststack from side of BUSmaster
 
-#WAGO 750-430       8 ch di
-WAGO_750_430_0 = WAGO_750_430(modbus_io)
-#WAGO 750-430       8 ch di
-WAGO_750_430_1 = WAGO_750_430(modbus_io)
+# KL4032_0 = Beckhoff_KL4032(modbus_io)
+# KL4032_0.setAnalogOutput(0,0x7fff)
+# KL4032_0.setAnalogOutput(1,0)
+# print(KL4032_0.getAnalogOutput(0), KL4032_0.getAnalogOutput(1))
 
-#Beckhoff KL1104    4 ch di
+KL2134_0 = Beckhoff_KL2134(modbus_io)
+KL2134_1 = Beckhoff_KL2134(modbus_io)
 
-# WAGO 750-504      4 ch do
-WAGO_750_504_0 = WAGO_750_504(modbus_io)
-# WAGO 750-1515     8 ch do
+# reset outputs
+value = [0,0,0,0]
+KL2134_0.setBinaryOutputs( value )
+KL2134_1.setBinaryOutputs( value )
+
+time.sleep(0.5)
+
+for i in range(4):
+    value = [0,0,0,0]
+    value[i] = 1
+    KL2134_0.setBinaryOutputs( value )
+    KL2134_1.setBinaryOutputs( value )
+    time.sleep(0.5)
+
 # WAGO 750-600      endterminal
 _ = WAGO_750_600(modbus_io)
