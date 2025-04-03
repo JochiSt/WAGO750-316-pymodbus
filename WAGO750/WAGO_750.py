@@ -57,8 +57,10 @@ class WAGO_750(object):
         self._DEBUG = DEBUG
         
         self.modules = []
-        self.current_in_offset = 0
-        self.current_out_offset = 0
+        self.inBitOffset = 0
+        self.outBitOffset = 0
+        self.inWordOffset = 0
+        self.outWordOffset = 0
         
     def read_firmware_info(self):
         for key in WAGO_750._FIRMWARE_INFO_REGISTERS.keys():          
@@ -103,24 +105,29 @@ class WAGO_750(object):
                 WAGO_750._CONFIGURATION_REGISTERS[key][0], count=WAGO_750._CONFIGURATION_REGISTERS[key][1], slave=self.device_id)
             self._CONFIGURATION_REGISTERS_RESULT[key] = result.registers[0]
               
-        if self._DEBUG:          
+        if self._DEBUG:    
             for key in self._CONFIGURATION_REGISTERS_RESULT.keys():
                 print(key, "%d"%(self._CONFIGURATION_REGISTERS_RESULT[key]))
             
-    def add_module(self, module, N_in_regs=None, N_out_regs=None):
-        self.modules.append(module)
-        
-        inOffset = self.current_in_offset
-        outOffset = self.current_out_offset
-        
-        if N_in_regs:
-            self.current_in_offset += N_in_regs
-        
-        if N_out_regs:
-            self.current_out_offset += N_out_regs
+    def add_module(self, module, NinBits = None, NoutBits = None, NinWords = None, NoutWords = None):                
+        offsets = self.getOffsets()
+                
+        if NinBits:
+            self.inBitOffset += NinBits       
+        if NoutBits:
+            self.outBitOffset += NoutBits
+        if NinWords:
+            self.inWordOffset += NinWords    
+        if NoutWords:
+            self.outWordOffset += NoutWords
             
-        return inOffset, outOffset
+        self.modules.append(module)            
+            
+        if self._DEBUG:            
+            print("\tcurrent offsets", offsets)
+            
+        return offsets
         
     def getOffsets(self):
-        return self.current_in_offset, self.current_out_offset
+        return self.inBitOffset, self.outBitOffset, self.inWordOffset, self.outWordOffset
     
