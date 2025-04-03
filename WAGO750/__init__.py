@@ -13,5 +13,6 @@ from .WAGO_750_1515 import WAGO_750_1515
 
 from .Beckhoff_KL1104 import Beckhoff_KL1104
 from .Beckhoff_KL2134 import Beckhoff_KL2134
+from .Beckhoff_KL2012 import Beckhoff_KL2012
 from .Beckhoff_KL3062 import Beckhoff_KL3062
 from .Beckhoff_KL4032 import Beckhoff_KL4032
