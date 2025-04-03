@@ -57,7 +57,7 @@ for i in range(4):
 KL4032_0.setAnalogOutput(0,0x7fff)
 KL4032_0.setAnalogOutput(1,0)
 
-print(KL4032_0.getAnalogOutput(0), KL4032_0.getAnalogOutput(1))
+print("0x%04X 0x%04X" %(KL4032_0.getAnalogOutput(0), KL4032_0.getAnalogOutput(1)))
 
 print(KL2134_0.getBinaryOutputs(), KL2134_1.getBinaryOutputs())
 print(KL1002_0.readBinaryInputs(), KL1002_1.readBinaryInputs())
